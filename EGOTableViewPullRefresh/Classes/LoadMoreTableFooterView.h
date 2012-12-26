@@ -29,6 +29,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "EGORefreshTableHeaderView.h"
+#import "DVActivityIndicator.h"
 
 @protocol LoadMoreTableFooterDelegate;
 @interface LoadMoreTableFooterView : UIView {
@@ -38,7 +39,7 @@
     
 	UILabel *_statusLabel;
 	CALayer *_arrowImage;
-	UIActivityIndicatorView *_activityView;
+	DVActivityIndicator *_activityView;
     
     // Set this to Yes when egoRefreshTableHeaderDidTriggerRefresh delegate is called and No with egoRefreshScrollViewDataSourceDidFinishedLoading
     BOOL isLoading;

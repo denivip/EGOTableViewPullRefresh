@@ -76,7 +76,8 @@
 		_arrowImage=layer;
 		
         /* Config activity indicator */
-		UIActivityIndicatorView *view = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:DEFAULT_ACTIVITY_INDICATOR_STYLE];
+		DVActivityIndicator *view = [DVActivityIndicator indicatorWithImageNamed:@"loading_black" animationDuration:0.1f];
+        view.hidesWhenStopped = YES;
 		view.frame = CGRectMake(25.0f,midY - 8, 20.0f, 20.0f);
 		[self addSubview:view];
 		_activityView = view;		
