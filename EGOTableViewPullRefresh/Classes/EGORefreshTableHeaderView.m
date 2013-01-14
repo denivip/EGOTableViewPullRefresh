@@ -275,12 +275,11 @@
 	
 	
 	if (scrollView.contentOffset.y <= - PULL_TRIGGER_HEIGHT && !isLoading) {
+        [self startAnimatingWithScrollView:scrollView];
         if ([_delegate respondsToSelector:@selector(egoRefreshTableHeaderDidTriggerRefresh:)]) {
             [_delegate egoRefreshTableHeaderDidTriggerRefresh:self];
         }
-        [self startAnimatingWithScrollView:scrollView];
 	}
-	
 }
 
 - (void)egoRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView {	

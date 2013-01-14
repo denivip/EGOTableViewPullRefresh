@@ -216,10 +216,10 @@
 	
 	
 	if ([self scrollViewOffsetFromBottom:scrollView] <= - PULL_TRIGGER_HEIGHT && !isLoading) {
+        [self startAnimatingWithScrollView:scrollView];
         if ([_delegate respondsToSelector:@selector(loadMoreTableFooterDidTriggerLoadMore:)]) {
             [_delegate loadMoreTableFooterDidTriggerLoadMore:self];
         }
-        [self startAnimatingWithScrollView:scrollView];
 	}
 	
 }
