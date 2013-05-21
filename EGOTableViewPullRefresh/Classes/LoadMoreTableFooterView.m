@@ -70,7 +70,7 @@
         /* Config activity indicator */
         DVActivityIndicator *view = [[DVActivityIndicator alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
         view.hidesWhenStopped = YES;
-        view.image = [UIImage imageNamed:@"loading_black"];
+        view.image = [UIImage imageNamed:@"loading_view"];
 		view.frame = CGRectMake(25.0f,midY - 8, 20.0f, 20.0f);
 		[self addSubview:view];
 		_activityView = view;		
