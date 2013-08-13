@@ -312,7 +312,8 @@
 #pragma mark Dealloc
 
 - (void)dealloc {
-	
+	[[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
+    
 	_delegate=nil;
 	[_activityView release];
 	[_statusLabel release];
