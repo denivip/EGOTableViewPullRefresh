@@ -286,6 +286,11 @@
 	
     isLoading = NO;
     
+    [self performSelector:@selector(performFinishedAnimationForScrollView:) withObject:scrollView afterDelay:0.0];
+}
+
+- (void) performFinishedAnimationForScrollView:(UIScrollView *)scrollView
+{
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:.3];
     UIEdgeInsets currentInsets = scrollView.contentInset;
