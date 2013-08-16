@@ -27,13 +27,24 @@
 #import "EGORefreshTableHeaderView.h"
 
 
-@interface EGORefreshTableHeaderView (Private)
+@interface EGORefreshTableHeaderView () {
+
+	EGOPullState _state;
+
+	UILabel *_lastUpdatedLabel;
+	UILabel *_statusLabel;
+	CALayer *_arrowImage;
+	DVActivityIndicator *_activityView;
+
+    // Set this to Yes when egoRefreshTableHeaderDidTriggerRefresh delegate is called and No with egoRefreshScrollViewDataSourceDidFinishedLoading
+    BOOL isLoading;
+
+}
+
 - (void)setState:(EGOPullState)aState;
 @end
 
 @implementation EGORefreshTableHeaderView
-
-@synthesize delegate=_delegate;
 
 
 - (id)initWithFrame:(CGRect)frame {
@@ -313,13 +324,6 @@
 
 - (void)dealloc {
 	[[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
-    
-	_delegate=nil;
-	[_activityView release];
-	[_statusLabel release];
-	[_arrowImage release];
-	[_lastUpdatedLabel release];
-    [super dealloc];
 }
 
 

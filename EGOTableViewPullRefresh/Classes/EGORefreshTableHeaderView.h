@@ -46,22 +46,9 @@ typedef enum{
 
 
 @protocol EGORefreshTableHeaderDelegate;
-@interface EGORefreshTableHeaderView : UIView {
-	
-	id _delegate;
-	EGOPullState _state;
-    
-	UILabel *_lastUpdatedLabel;
-	UILabel *_statusLabel;
-	CALayer *_arrowImage;
-	DVActivityIndicator *_activityView;
-    
-    // Set this to Yes when egoRefreshTableHeaderDidTriggerRefresh delegate is called and No with egoRefreshScrollViewDataSourceDidFinishedLoading
-    BOOL isLoading;
-	
-}
+@interface EGORefreshTableHeaderView : UIView
 
-@property(nonatomic,assign) id <EGORefreshTableHeaderDelegate> delegate;
+@property (nonatomic, weak) id <EGORefreshTableHeaderDelegate> delegate;
 
 - (void)refreshLastUpdatedDate;
 - (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView;
@@ -74,7 +61,7 @@ typedef enum{
 
 @end
 
-@protocol EGORefreshTableHeaderDelegate
+@protocol EGORefreshTableHeaderDelegate <NSObject>
 - (void)egoRefreshTableHeaderDidTriggerRefresh:(EGORefreshTableHeaderView*)view;
 @optional
 - (NSDate*)egoRefreshTableHeaderDataSourceLastUpdated:(EGORefreshTableHeaderView*)view;
