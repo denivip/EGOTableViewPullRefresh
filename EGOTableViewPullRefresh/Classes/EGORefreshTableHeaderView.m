@@ -277,9 +277,6 @@
     currentInsets.top = PULL_AREA_HEIGTH;
     scrollView.contentInset = currentInsets;
     [UIView commitAnimations];
-    if(scrollView.contentOffset.y == 0){
-        [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, -PULL_TRIGGER_HEIGHT) animated:YES];
-    }    
 }
 
 - (void)egoRefreshScrollViewDidEndDragging:(UIScrollView *)scrollView {
@@ -296,19 +293,25 @@
 - (void)egoRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView {	
 	
     isLoading = NO;
-    
-    [self performSelector:@selector(performFinishedAnimationForScrollView:) withObject:scrollView afterDelay:0.0];
+
+    // Give start animation some time to finish.
+
+    [self performSelector:@selector(performFinishedAnimationForScrollView:) withObject:scrollView afterDelay:0.2];
 }
 
 - (void) performFinishedAnimationForScrollView:(UIScrollView *)scrollView
 {
-	[UIView beginAnimations:nil context:NULL];
-	[UIView setAnimationDuration:.3];
-    UIEdgeInsets currentInsets = scrollView.contentInset;
-    currentInsets.top = 0;
-    scrollView.contentInset = currentInsets;
-	[UIView commitAnimations];
-	
+    [UIView animateWithDuration:.3 animations:^{
+        UIEdgeInsets currentInsets = scrollView.contentInset;
+        currentInsets.top = 0;
+        scrollView.contentInset = currentInsets;
+
+        CGFloat yOffset = scrollView.contentOffset.y;
+        if (self.searchBarHeight > 0 && yOffset < self.searchBarHeight) {
+            [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, self.searchBarHeight) animated:YES];
+        }
+    }];
+
 	[self setState:EGOOPullNormal];
     
 }

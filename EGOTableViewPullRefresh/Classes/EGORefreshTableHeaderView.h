@@ -49,6 +49,7 @@ typedef enum{
 @interface EGORefreshTableHeaderView : UIView
 
 @property (nonatomic, weak) id <EGORefreshTableHeaderDelegate> delegate;
+@property (nonatomic) CGFloat searchBarHeight;
 
 - (void)refreshLastUpdatedDate;
 - (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView;
