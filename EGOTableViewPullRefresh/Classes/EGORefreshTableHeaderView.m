@@ -288,37 +288,33 @@
 
     // Give start animation some time to finish.
 
-    [self performSelector:@selector(performFinishedAnimationForScrollView:) withObject:scrollView afterDelay:0.2];
-}
+    @weakify(self);
+    @weakify(scrollView);
 
-- (void) performFinishedAnimationForScrollView:(UIScrollView *)scrollView
-{
-    [UIView animateWithDuration:.3 animations:^{
-        UIEdgeInsets currentInsets = scrollView.contentInset;
-        currentInsets.top = 0;
-        scrollView.contentInset = currentInsets;
+    double delayInSeconds = 0.2;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        @strongify(self);
+        @strongify(scrollView);
 
-        CGFloat yOffset = scrollView.contentOffset.y;
-        if (self.searchBarHeight > 0 && yOffset < self.searchBarHeight) {
-            [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, self.searchBarHeight) animated:YES];
-        }
-    }];
+        [UIView animateWithDuration:.3 animations:^{
+            UIEdgeInsets currentInsets = scrollView.contentInset;
+            currentInsets.top = 0;
+            scrollView.contentInset = currentInsets;
 
-	[self setState:EGOOPullNormal];
-    
+            CGFloat yOffset = scrollView.contentOffset.y;
+            if (self.searchBarHeight > 0 && yOffset < self.searchBarHeight) {
+                [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, self.searchBarHeight) animated:YES];
+            }
+        }];
+        
+        [self setState:EGOOPullNormal];
+    });
 }
 
 - (void)egoRefreshScrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
     [self refreshLastUpdatedDate];
-}
-
-
-#pragma mark -
-#pragma mark Dealloc
-
-- (void)dealloc {
-	[[NSRunLoop mainRunLoop] cancelPerformSelectorsWithTarget:self];
 }
 
 
