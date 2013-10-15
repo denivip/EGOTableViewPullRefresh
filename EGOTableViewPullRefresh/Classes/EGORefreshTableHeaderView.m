@@ -27,21 +27,13 @@
 #import "EGORefreshTableHeaderView.h"
 
 
-@interface EGORefreshTableHeaderView () {
-
-	EGOPullState _state;
-
-	UILabel *_lastUpdatedLabel;
-	UILabel *_statusLabel;
-	CALayer *_arrowImage;
-	DVActivityIndicator *_activityView;
-
-    // Set this to Yes when egoRefreshTableHeaderDidTriggerRefresh delegate is called and No with egoRefreshScrollViewDataSourceDidFinishedLoading
-    BOOL isLoading;
-
-}
-
-- (void)setState:(EGOPullState)aState;
+@interface EGORefreshTableHeaderView ()
+@property (nonatomic) EGOPullState state;
+@property (nonatomic, weak) UILabel *lastUpdatedLabel;
+@property (nonatomic, weak) UILabel *statusLabel;
+@property (nonatomic, weak) CALayer *arrowImage;
+@property (nonatomic, weak) DVActivityIndicator *activityView;
+@property (nonatomic) BOOL isLoading;
 @end
 
 @implementation EGORefreshTableHeaderView
@@ -50,7 +42,7 @@
 - (id)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
 		
-        isLoading = NO;
+        _isLoading = NO;
         
         CGFloat midY = frame.size.height - PULL_AREA_HEIGTH/2;
         
@@ -250,9 +242,9 @@
         scrollView.contentInset = currentInsets;
 		
 	} else if (scrollView.isDragging) {
-		if (_state == EGOOPullPulling && scrollView.contentOffset.y > -PULL_TRIGGER_HEIGHT && scrollView.contentOffset.y < 0.0f && !isLoading) {
+		if (_state == EGOOPullPulling && scrollView.contentOffset.y > -PULL_TRIGGER_HEIGHT && scrollView.contentOffset.y < 0.0f && !_isLoading) {
 			[self setState:EGOOPullNormal];
-		} else if (_state == EGOOPullNormal && scrollView.contentOffset.y < -PULL_TRIGGER_HEIGHT && !isLoading) {
+		} else if (_state == EGOOPullNormal && scrollView.contentOffset.y < -PULL_TRIGGER_HEIGHT && !_isLoading) {
 			[self setState:EGOOPullPulling];
             
 		}
@@ -268,7 +260,7 @@
 }
 
 - (void)startAnimatingWithScrollView:(UIScrollView *) scrollView {
-    isLoading = YES;
+    _isLoading = YES;
     
     [self setState:EGOOPullLoading];
     [UIView beginAnimations:nil context:NULL];
@@ -282,7 +274,7 @@
 - (void)egoRefreshScrollViewDidEndDragging:(UIScrollView *)scrollView {
 	
 	
-	if (scrollView.contentOffset.y <= - PULL_TRIGGER_HEIGHT && !isLoading) {
+	if (scrollView.contentOffset.y <= - PULL_TRIGGER_HEIGHT && !_isLoading) {
         [self startAnimatingWithScrollView:scrollView];
         if ([_delegate respondsToSelector:@selector(egoRefreshTableHeaderDidTriggerRefresh:)]) {
             [_delegate egoRefreshTableHeaderDidTriggerRefresh:self];
@@ -292,7 +284,7 @@
 
 - (void)egoRefreshScrollViewDataSourceDidFinishedLoading:(UIScrollView *)scrollView {	
 	
-    isLoading = NO;
+    _isLoading = NO;
 
     // Give start animation some time to finish.
 
