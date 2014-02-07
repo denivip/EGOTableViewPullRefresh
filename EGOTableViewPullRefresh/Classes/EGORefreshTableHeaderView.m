@@ -34,6 +34,8 @@
 @property (nonatomic, weak) CALayer *arrowImage;
 @property (nonatomic, weak) DVActivityIndicator *activityView;
 @property (nonatomic) BOOL isLoading;
+@property (nonatomic) UIEdgeInsets originalContentInset;
+@property (nonatomic) BOOL restoreOriginalContentInset;
 @end
 
 @implementation EGORefreshTableHeaderView
@@ -227,6 +229,10 @@
     _arrowImage.contents = (id)(arrowImage? arrowImage.CGImage : DEFAULT_ARROW_IMAGE.CGImage);
 }
 
+- (CGFloat)pullTriggerHeightWithContentInset:(UIEdgeInsets)contentInset
+{
+    return PULL_TRIGGER_HEIGHT + contentInset.top;
+}
 
 #pragma mark -
 #pragma mark ScrollView Methods
@@ -235,24 +241,40 @@
 - (void)egoRefreshScrollViewDidScroll:(UIScrollView *)scrollView {	
     
 	if (_state == EGOOPullLoading) {
-		CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
-		offset = MIN(offset, PULL_AREA_HEIGTH);
-        UIEdgeInsets currentInsets = scrollView.contentInset;
-        currentInsets.top = offset;
-        scrollView.contentInset = currentInsets;
-		
-	} else if (scrollView.isDragging) {
-		if (_state == EGOOPullPulling && scrollView.contentOffset.y > -PULL_TRIGGER_HEIGHT && scrollView.contentOffset.y < 0.0f && !_isLoading) {
-			[self setState:EGOOPullNormal];
-		} else if (_state == EGOOPullNormal && scrollView.contentOffset.y < -PULL_TRIGGER_HEIGHT && !_isLoading) {
-			[self setState:EGOOPullPulling];
-            
-		}
-		
-		if (scrollView.contentInset.top != 0) {
+        if (! self.restoreOriginalContentInset) {
+            CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
+            offset = MIN(offset, PULL_AREA_HEIGTH);
             UIEdgeInsets currentInsets = scrollView.contentInset;
-            currentInsets.top = 0;
+            self.originalContentInset = currentInsets;
+            self.restoreOriginalContentInset = YES;
+            currentInsets.top += offset;
             scrollView.contentInset = currentInsets;
+        }
+
+	} else if (scrollView.isDragging) {
+        if (! _isLoading) {
+            switch (_state) {
+                case EGOOPullPulling:
+                    if (scrollView.contentOffset.y > - [self pullTriggerHeightWithContentInset:scrollView.contentInset] &&
+                        scrollView.contentOffset.y < 0.0f) {
+                        [self setState:EGOOPullNormal];
+                    }
+                    break;
+                    
+                case EGOOPullNormal:
+                    if (scrollView.contentOffset.y < - [self pullTriggerHeightWithContentInset:scrollView.contentInset]) {
+                        [self setState:EGOOPullPulling];
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+		if (self.restoreOriginalContentInset && scrollView.contentInset.top != self.originalContentInset.top) {
+            scrollView.contentInset = self.originalContentInset;
+            self.restoreOriginalContentInset = NO;
 		}
 		
 	}
@@ -263,18 +285,22 @@
     _isLoading = YES;
     
     [self setState:EGOOPullLoading];
-    [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:0.2];
-    UIEdgeInsets currentInsets = scrollView.contentInset;
-    currentInsets.top = PULL_AREA_HEIGTH;
-    scrollView.contentInset = currentInsets;
-    [UIView commitAnimations];
+
+    if (! self.restoreOriginalContentInset) {
+        [UIView beginAnimations:nil context:NULL];
+        [UIView setAnimationDuration:0.2];
+        UIEdgeInsets currentInsets = scrollView.contentInset;
+        self.originalContentInset = currentInsets;
+        self.restoreOriginalContentInset = YES;
+        currentInsets.top += PULL_AREA_HEIGTH;
+        scrollView.contentInset = currentInsets;
+        [UIView commitAnimations];
+    }
 }
 
 - (void)egoRefreshScrollViewDidEndDragging:(UIScrollView *)scrollView {
-	
-	
-	if (scrollView.contentOffset.y <= - PULL_TRIGGER_HEIGHT && !_isLoading) {
+
+	if (scrollView.contentOffset.y <= - [self pullTriggerHeightWithContentInset:scrollView.contentInset] && !_isLoading) {
         [self startAnimatingWithScrollView:scrollView];
         if ([_delegate respondsToSelector:@selector(egoRefreshTableHeaderDidTriggerRefresh:)]) {
             [_delegate egoRefreshTableHeaderDidTriggerRefresh:self];
@@ -298,9 +324,10 @@
         @strongify(scrollView);
 
         [UIView animateWithDuration:.3 animations:^{
-            UIEdgeInsets currentInsets = scrollView.contentInset;
-            currentInsets.top = 0;
-            scrollView.contentInset = currentInsets;
+            if (self.restoreOriginalContentInset) {
+                scrollView.contentInset = self.originalContentInset;
+                self.restoreOriginalContentInset = NO;
+            }
 
             CGFloat yOffset = scrollView.contentOffset.y;
             if (self.searchBarHeight > 0 && yOffset < self.searchBarHeight) {
