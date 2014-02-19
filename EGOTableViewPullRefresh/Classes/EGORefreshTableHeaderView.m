@@ -330,8 +330,8 @@
             }
 
             CGFloat yOffset = scrollView.contentOffset.y;
-            if (self.searchBarHeight > 0 && yOffset < self.searchBarHeight) {
-                [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, self.searchBarHeight) animated:YES];
+            if (self.searchBarHeight > 0 && yOffset < (self.searchBarHeight - scrollView.contentInset.top)) {
+                [scrollView setContentOffset:CGPointMake(scrollView.contentOffset.x, (self.searchBarHeight - scrollView.contentInset.top)) animated:YES];
             }
         }];
         
