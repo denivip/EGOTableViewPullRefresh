@@ -89,10 +89,10 @@
 #pragma mark - Util
 - (CGFloat)scrollViewOffsetFromBottom:(UIScrollView *) scrollView
 {
-    CGFloat scrollAreaContenHeight = scrollView.contentSize.height;
+    CGFloat scrollAreaContentHeight = scrollView.contentSize.height;
     
-    CGFloat visibleTableHeight = MIN(scrollView.bounds.size.height, scrollAreaContenHeight);
-    CGFloat scrolledDistance = scrollView.contentOffset.y + visibleTableHeight; // If scrolled all the way down this should add upp to the content heigh.
+    CGFloat visibleTableHeight = MIN(scrollView.bounds.size.height, scrollAreaContentHeight);
+    CGFloat scrolledDistance = scrollView.contentOffset.y + visibleTableHeight; // If scrolled all the way down this should add upp to the content height.
     
     CGFloat normalizedOffset = scrollAreaContenHeight -scrolledDistance;
     

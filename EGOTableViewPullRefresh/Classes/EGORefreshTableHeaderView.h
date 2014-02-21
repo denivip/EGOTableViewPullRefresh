@@ -41,8 +41,8 @@ typedef enum{
 
 #define FLIP_ANIMATION_DURATION 0.18f
 
-#define PULL_AREA_HEIGTH 60.0f
-#define PULL_TRIGGER_HEIGHT (PULL_AREA_HEIGTH + 5.0f)
+#define PULL_AREA_HEIGHT 60.0f
+#define PULL_TRIGGER_HEIGHT (PULL_AREA_HEIGHT + 5.0f)
 
 
 @protocol EGORefreshTableHeaderDelegate;

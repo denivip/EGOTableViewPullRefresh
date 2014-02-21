@@ -132,7 +132,7 @@
     [loadMoreView egoRefreshScrollViewDidScroll:self];
 }
 
-#pragma mark - Status Propreties
+#pragma mark - Status Properties
 
 @synthesize pullTableIsRefreshing;
 @synthesize pullTableIsLoadingMore;
@@ -140,7 +140,7 @@
 - (void)setPullTableIsRefreshing:(BOOL)isRefreshing
 {
     if(!pullTableIsRefreshing && isRefreshing) {
-        // If not allready refreshing start refreshing
+        // If not already refreshing start refreshing
         [refreshView startAnimatingWithScrollView:self];
         pullTableIsRefreshing = YES;
     } else if(pullTableIsRefreshing && !isRefreshing) {
@@ -152,7 +152,7 @@
 - (void)setPullTableIsLoadingMore:(BOOL)isLoadingMore
 {
     if(!pullTableIsLoadingMore && isLoadingMore) {
-        // If not allready loading more start refreshing
+        // If not already loading more start refreshing
         [loadMoreView startAnimatingWithScrollView:self];
         pullTableIsLoadingMore = YES;
     } else if(pullTableIsLoadingMore && !isLoadingMore) {

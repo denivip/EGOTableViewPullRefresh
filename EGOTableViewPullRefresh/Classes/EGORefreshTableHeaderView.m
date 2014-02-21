@@ -46,7 +46,7 @@
 		
         _isLoading = NO;
         
-        CGFloat midY = frame.size.height - PULL_AREA_HEIGTH/2;
+        CGFloat midY = frame.size.height - PULL_AREA_HEIGHT/2;
         
         /* Config Last Updated Label */
 		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, midY, self.frame.size.width, 20.0f)];
@@ -154,7 +154,7 @@
     }
     
     // Center the status label if the lastupdate is not available
-    CGFloat midY = self.frame.size.height - PULL_AREA_HEIGTH/2;
+    CGFloat midY = self.frame.size.height - PULL_AREA_HEIGHT/2;
     if(!_lastUpdatedLabel.text) {
         _statusLabel.frame = CGRectMake(0.0f, midY - 8, self.frame.size.width, 20.0f);
     } else {
@@ -243,7 +243,7 @@
 	if (_state == EGOOPullLoading) {
         if (! self.restoreOriginalContentInset) {
             CGFloat offset = MAX(scrollView.contentOffset.y * -1, 0);
-            offset = MIN(offset, PULL_AREA_HEIGTH);
+            offset = MIN(offset, PULL_AREA_HEIGHT);
             UIEdgeInsets currentInsets = scrollView.contentInset;
             self.originalContentInset = currentInsets;
             self.restoreOriginalContentInset = YES;
@@ -292,7 +292,7 @@
         UIEdgeInsets currentInsets = scrollView.contentInset;
         self.originalContentInset = currentInsets;
         self.restoreOriginalContentInset = YES;
-        currentInsets.top += PULL_AREA_HEIGTH;
+        currentInsets.top += PULL_AREA_HEIGHT;
         scrollView.contentInset = currentInsets;
         [UIView commitAnimations];
     }
