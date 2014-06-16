@@ -52,7 +52,6 @@
 		UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, midY, self.frame.size.width, 20.0f)];
 		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		label.font = [UIFont systemFontOfSize:12.0f];
-		label.shadowOffset = CGSizeMake(0.0f, 1.0f);
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:label];
@@ -62,7 +61,6 @@
 		label = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, midY - 18, self.frame.size.width, 20.0f)];
 		label.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 		label.font = [UIFont boldSystemFontOfSize:13.0f];
-		label.shadowOffset = CGSizeMake(0.0f, 1.0f);
 		label.backgroundColor = [UIColor clearColor];
 		label.textAlignment = NSTextAlignmentCenter;
 		[self addSubview:label];
@@ -223,8 +221,6 @@
         _lastUpdatedLabel.textColor = DEFAULT_TEXT_COLOR;
         _statusLabel.textColor = DEFAULT_TEXT_COLOR;
     }
-    _lastUpdatedLabel.shadowColor = [_lastUpdatedLabel.textColor colorWithAlphaComponent:0.1f];
-    _statusLabel.shadowColor = [_statusLabel.textColor colorWithAlphaComponent:0.1f];
     
     _arrowImage.contents = (id)(arrowImage? arrowImage.CGImage : DEFAULT_ARROW_IMAGE.CGImage);
 }
